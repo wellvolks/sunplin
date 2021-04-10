@@ -1,0 +1,105 @@
+.buttons-wellvolks{
+   position:relative;
+
+}
+
+.buttons-wellvolks ul{
+   list-style: none;
+
+}
+
+.buttons-wellvolks ul li{
+   display: inline;
+}
+
+.buttons-wellvolks ul li a {
+   text-decoration: none;
+   color: #000;
+   padding-top: 80px;
+   background-position: center;
+   cursor: pointer;
+   padding-bottom: 0px;
+}
+
+.buttons-wellvolks ul li .button-next:hover{
+   color: rgb(245,134,52);
+   background-position: center;
+   background-size: 34px;
+}
+
+.buttons-wellvolks ul li .button-upload-file:hover,
+.buttons-wellvolks ul li .button-start-generate:hover,
+.buttons-wellvolks ul li .button-download-file:hover,
+.buttons-wellvolks ul li .button-download-file-missing:hover,
+.buttons-wellvolks ul li .button-download-file-fail:hover,
+.buttons-wellvolks ul li .button-back:hover,
+.buttons-wellvolks ul li .button-reset:hover{
+   color: rgb(245,134,52);
+   background-position: center;
+   background-size: 66px;
+}
+
+.buttons-wellvolks ul li .button-download-file{
+   background: url(../images/download_file.png) no-repeat;
+   background-position: center;
+   background-size: 60px;
+}
+
+.buttons-wellvolks ul li .button-upload-file{
+   background: url(../images/upload_file.png) no-repeat;
+   background-position: center;
+   background-size: 60px;
+}
+
+.buttons-wellvolks ul li .button-upload-file-disable{
+   background: url(../images/upload_file_disable.png) no-repeat;
+   color:rgba(160,160,160);
+   background-position: center;
+   background-size: 60px;
+}
+
+.buttons-wellvolks ul li .button-download-file-missing{
+   background: url(../images/download_file_disable.png) no-repeat;
+   color:rgba(160,160,160);
+   background-position: center;
+   background-size: 60px;
+}
+
+.buttons-wellvolks ul li .button-download-file-disable{
+   background: url(../images/download_file_disable.png) no-repeat;
+   color:rgba(160,160,160);
+   background-position: center;
+   background-size: 60px;
+}
+
+.buttons-wellvolks ul li .button-download-file-fail{
+   background: url(../images/download_file_fail.png) no-repeat;
+   background-position: center;
+   background-size: 60px;
+}
+
+
+.buttons-wellvolks ul li .button-start-generate{
+   background: url(../images/submit.png) no-repeat;
+   background-position: center;
+   background-size: 60px;
+
+}
+
+.buttons-wellvolks ul li .button-reset{
+   background: url(../images/reset.png) no-repeat;
+   background-position: center;
+   background-size: 60px;
+}
+
+.buttons-wellvolks ul li .button-next{
+   background: url(../images/next_icon.png) no-repeat;
+   background-position: center;
+   background-size: 30px;
+}
+
+.buttons-wellvolks ul li .button-back{
+   background: url(../images/back.png) no-repeat;
+   background-position: center;
+   background-size: 60px;
+}

@@ -1,0 +1,91 @@
+<script type="text/javascript">
+  window.onload = function(){
+    $.ajax({
+        url: '/sunpling',
+        type: "POST",
+        timeout: 1000 * 3600, // (1s * 3600s = 1h)
+        success: function(result){
+          updatePageAfterSucess(result);
+          console.log('Success')
+          console.log(result)
+        },
+        error: function(error){
+          updatePageAfterError(error.statusText);
+          console.log('Fail')
+          console.log(error)
+        }
+      })
+  }
+</script>
+<div style="width:999px; height: auto; margin: 0 auto">
+    <div id = "page_top" style="vertical-align: middle;">
+        <img src="../images/logo_2.png" style="display: block; margin-left: auto; margin-right: auto; margin-bottom: 10px; margin-top: 10px">
+        <div align="center" id="desc" style = "border-style: groove;">
+            <p style="padding: 0 30px; margin-top: 10px; margin-bottom: 10px; font-size: 14px"> SUNPLIN (Simulation with Uncertainty for Phylogenetic Investigations) expands trees by inserting the provided Phylogenetic Uncertain Taxa (PUT) randomly into the partially known tree and calculates the correspoding patristic distance matrices. The results can be easily imported in a statistical software and used to conduct large scale phylogenetic comparative simulation that take uncertainty into account.
+            </p>
+       </div>
+    </div>
+    <div id = "page_middle" style="text-align: center;height: 990x; border-style: groove; margin-top: 10px;">
+      <div style="width: 800px; padding: 10px 30px; margin: 0 auto;">
+        <div class="d-flex justify-content-between" style="width: 800px;">
+          <div class="p-2">
+            <div  class="buttons-wellvolks" style="margin-left: -35px;margin-top: 60px">
+                <ul>
+                    <li>
+                        <a id=down_tree class="button-download-file-disable" >
+                            Download file trees
+                        </a>
+                    </li>
+                </ul>
+            </div>
+          </div>
+
+          <div class="p-2">
+            <div class="d-flex flex-column align-items-center">
+              <div class="p-2">
+                <div id = "status_sunplin" class="status__root___2rxe7 status__running___1VELs">
+                  <svg width="50" height="50" viewBox="0 0 24 24">
+                    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"></path>
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="p-2">
+                <label id = 'status_info'>
+                  Wait, sunplin is working...
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="p-2">
+            <div class="buttons-wellvolks" style="margin-top: 60px">
+                <ul>
+                    <li>
+                        <a id=down_mat class="button-download-file-disable" >
+                            Download file distance <p style="text-align:center">matrices</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="width: 800px; padding: 10px 30px;margin: 0 auto;">
+        <div class="buttons-wellvolks" style="margin-left: -50px;margin-top: 60px">
+            <ul>
+                <li>
+                    <a id = "return_to_home" class="button-back" >
+                        Returns to parameters
+                    </a>
+                </li>
+            </ul>
+        </div>
+      </div>
+    </div>
+    <div id = "page_bottom" style="display: block; height: 990x; border-style: groove; margin: 10px 0; padding: 10px; font-size: 14px">
+        <div align="center">Download the User Manual <a href="http://wsmartins.net/public/UserManual_Sunplin.pdf">here</a>.</div>
+          <td colspan="2"></td>
+        <div align="center">SUNPLIN is under the terms of the <a href="http://creativecommons.org/licenses/by-nc/3.0/">Creative Commons Attibution Nocommercial 2.5 License</a>.</div>
+        <div align="center">The source-code is available  <a href="http://sourceforge.net/projects/sunplin/">here</a>.</div>
+    </div>
+</div>

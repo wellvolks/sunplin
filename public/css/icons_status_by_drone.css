@@ -1,0 +1,161 @@
+.status__root___2rxe7 {
+  width: 60px;
+  height: 60px;
+  border-width: 3px;
+  border-style: solid;
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: flex;
+  align-content: center;
+  padding: 2px;
+}
+.status__root___2rxe7.status__success___2asG5 {
+  border-color: #4dc89a;
+}
+.status__root___2rxe7.status__success___2asG5 svg {
+  fill: #4dc89a;
+}
+.status__root___2rxe7.status__declined___2_0s0,
+.status__root___2rxe7.status__failure___1Viva,
+.status__root___2rxe7.status__killed___28pmc,
+.status__root___2rxe7.status__error___PCXjd {
+  border-color: #fc4758;
+}
+.status__root___2rxe7.status__declined___2_0s0 svg,
+.status__root___2rxe7.status__failure___1Viva svg,
+.status__root___2rxe7.status__killed___28pmc svg,
+.status__root___2rxe7.status__error___PCXjd svg {
+  fill: #fc4758;
+}
+.status__root___2rxe7.status__blocked___2ioEb,
+.status__root___2rxe7.status__running___1VELs,
+.status__root___2rxe7.status__started___2-FNQ {
+  border-color: #fdb835;
+}
+.status__root___2rxe7.status__blocked___2ioEb svg,
+.status__root___2rxe7.status__running___1VELs svg,
+.status__root___2rxe7.status__started___2-FNQ svg {
+  fill: #fdb835;
+}
+.status__root___2rxe7.status__started___2-FNQ svg,
+.status__root___2rxe7.status__running___1VELs svg {
+  animation: status__spinner___3IJPx 1.2s ease infinite;
+}
+.status__root___2rxe7.status__pending___163T_,
+.status__root___2rxe7.status__skipped___3k1eY {
+  border-color: #bdbdbd;
+}
+.status__root___2rxe7.status__pending___163T_ svg,
+.status__root___2rxe7.status__skipped___3k1eY svg {
+  fill: #bdbdbd;
+}
+.status__root___2rxe7.status__pending___163T_ svg {
+  animation: status__wrench___2K0fQ 2.5s ease infinite;
+  transform-origin: center 54%;
+}
+@keyframes status__spinner___3IJPx {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+@keyframes status__wrench___2K0fQ {
+  0% {
+    transform: rotate(-12deg);
+  }
+  8% {
+    transform: rotate(12deg);
+  }
+  10% {
+    transform: rotate(24deg);
+  }
+  18% {
+    transform: rotate(-24deg);
+  }
+  20% {
+    transform: rotate(-24deg);
+  }
+  28% {
+    transform: rotate(24deg);
+  }
+  30% {
+    transform: rotate(24deg);
+  }
+  38% {
+    transform: rotate(-24deg);
+  }
+  40% {
+    transform: rotate(-24deg);
+  }
+  48% {
+    transform: rotate(24deg);
+  }
+  50% {
+    transform: rotate(24deg);
+  }
+  58% {
+    transform: rotate(-24deg);
+  }
+  60% {
+    transform: rotate(-24deg);
+  }
+  68% {
+    transform: rotate(24deg);
+  }
+  75%,
+  100% {
+    transform: rotate(0deg);
+  }
+}
+.status__label___Hs4rP {
+  display: flex;
+  padding: 10px 20px;
+  border-radius: 2px;
+  background-color: #4dc89a;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+.status__label___Hs4rP div {
+  flex: 1;
+  vertical-align: middle;
+  line-height: 22px;
+  font-size: 15px;
+}
+.status__label___Hs4rP.status__success___2asG5 {
+  background-color: #4dc89a;
+}
+.status__label___Hs4rP.status__declined___2_0s0,
+.status__label___Hs4rP.status__failure___1Viva,
+.status__label___Hs4rP.status__killed___28pmc,
+.status__label___Hs4rP.status__error___PCXjd {
+  background-color: #fc4758;
+}
+.status__label___Hs4rP.status__blocked___2ioEb,
+.status__label___Hs4rP.status__running___1VELs,
+.status__label___Hs4rP.status__started___2-FNQ {
+  background-color: #fdb835;
+}
+.status__label___Hs4rP.status__pending___163T_,
+.status__label___Hs4rP.status__skipped___3k1eY {
+  background-color: #bdbdbd;
+}
+</style><style type="text/css">.build_time__host___9mFjx svg {
+  width: 16px;
+  height: 16px;
+}
+.build_time__row___htHfU {
+  display: flex;
+}
+.build_time__row___htHfU :first-child {
+  display: flex;
+  align-items: center;
+  margin-right: 5px;
+}
+.build_time__row___htHfU :last-child {
+  flex: 1;
+  line-height: 24px;
+  font-size: 14px;
+  white-space: nowrap;
+}

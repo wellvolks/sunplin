@@ -1,0 +1,33 @@
+.icon-generate{
+  background-image : url(../images/submit.png);
+  background-size: cover;
+  display: inline-block;
+  height: 70px;
+  width: 70px;
+}
+.icon-reset{
+  background-image : url(../images/reset.png);
+  background-size: cover;
+  display: inline-block;
+  height: 70px;
+  width: 70px;
+}
+.style-chosen label.cabi1{
+    margin:0 auto;
+    margin-top:0 auto;
+    width: 64px;
+    height: 64px;
+    background:url(../images/upload.png);
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.style-chosen label.cabi1 .file1{
+    position: relative;
+    height: 100%;
+    width: auto;
+    opacity: 0;
+    cursor:pointer;
+    -moz-opacity: 0;
+}

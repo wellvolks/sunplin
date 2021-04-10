@@ -1,0 +1,153 @@
+<div style="width:999px; height: auto; margin: 0 auto" id = "div_form">
+    <div id = "page_top" style="vertical-align: middle;">
+        <img src="./images/logo_2.png" style="display: block; margin-left: auto; margin-right: auto; margin-bottom: 10px; margin-top: 10px">
+        <div align="center" id="desc" style = "border-style: groove;">
+            <p style="padding: 0 30px; margin-top: 10px; margin-bottom: 10px; font-size: 14px"> SUNPLIN (Simulation with Uncertainty for Phylogenetic Investigations) expands trees by inserting the provided Phylogenetic Uncertain Taxa (PUT) randomly into the partially known tree and calculates the correspoding patristic distance matrices. The results can be easily imported in a statistical software and used to conduct large scale phylogenetic comparative simulation that take uncertainty into account.
+            </p>
+       </div>
+    </div>
+    <div id = "page_middle" style="display: block; height: 990x; border-style: groove; margin-top: 10px">
+        <form action="/run" method="post" id = "form_main" style="margin-top: -16px">
+          <div class="form-group" style="hidden:true">
+              <textarea class="form-control" name="params_hash" id="params_hash" rows="0" style="display:none" ></textarea>
+          </div>
+            <table class="table-main">
+                <tr id = "tr_tree_newick">
+                    <td>
+                        <div class="form-group" style="width: 800px; padding: 10px 30px; text-align: center">
+                            <label for="form_tree">Enter phylogenetic tree in Newick format</label>
+                            <textarea class="form-control" name="tree_newick" id="form_tree_newick" rows="4" ></textarea>
+                        </div>
+                    </td>
+                    <td>
+                      <div class="custom-control custom-switch" style="margin-top:20px">
+                          <input type="checkbox" class="custom-control-input" id="use_sample_tree">
+                          <label class="custom-control-label" for="use_sample_tree">Use sample tree</label>
+                      </div>
+                      <div class="buttons-wellvolks">
+                          <div style="margin-left: -20px;margin-top: 80px">
+                              <ul>
+                                  <li>
+                                      <a id="button_input_tree_newick" class="button-upload-file" >
+                                          ... or upload a file
+                                      </a>
+                                      <input id="file_input_tree_newick" type="file" name="name" onchange="loadFileToTextArea('form_tree_newick','file_input_tree_newick')" style="display: none;" />
+                                  </li>
+                              </ul>
+                          </div>
+                      </div>
+                    </td>
+                </tr>
+                <tr id = "tr_put_mdcc">
+                    <td>
+                        <div class="form-group" style="width: 800px; padding: 10px 30px; text-align: center">
+                            <label for="form_put_mdcc">Enter pairs PUT and MDCC, one per line, where PUT is the phylogenetic uncertain taxa and MDCC is the most derived consensus clade from which point the PUT will be randomly inserted</label>
+                            <textarea class="form-control" id="form_put_mdcc" rows="4"></textarea>
+                        </div>
+                    </td>
+                    <td>
+                      <div class="custom-control custom-switch" style="margin-top:40px; margin-left:-10px">
+                          <input type="checkbox" class="custom-control-input" id="use_sample_species">
+                          <label class="custom-control-label" for="use_sample_species">Use sample species</label>
+                      </div>
+                        <div class="buttons-wellvolks">
+                            <div style="margin-left: -20px;margin-top: 80px">
+                                <ul>
+                                    <li>
+                                        <a id="button_input_put_mdcc" class="button-upload-file" >
+                                            ... or upload a file
+                                        </a>
+                                        <input id="file_input_put_mdcc" type="file" name="name" onchange="loadFileToTextArea('form_put_mdcc','file_input_put_mdcc')" style="display: none;" />
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr id = "tr_based">
+                    <td>
+                        <div class="form-group" style="width: 800px; padding: 10px 30px; text-align: center">
+                            <label for="form_insert_method">Insertion method</label>
+                            <div style="border: 1.2px solid #d1d7dc; border-radius: 5px; height: 61px;margin: 0 auto; text-align:center; ">
+                                <div style="padding: 15px 0" >
+                                    <label class="checkbox-inline"><input type="checkbox" name="checkbox_based" id="checkbox_node_based" value="node_based"> Node-based</label>
+                                    <label class="checkbox-inline" style="padding-left: 20px"><input type="checkbox" name="checkbox_based"  id="checkbox_branch_based" value="branch_based"> Branch-based</label>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group" style="padding-right: 30px; text-align: center">
+                            <label for="extension_tree_file" style="font-size: 13px; margin-top:9px">Choose the extension for the tree-file</label>
+                            <select class="form-control" id="extension_tree_file" name="extension_tree_file">
+                                <option>.nex</option>
+                                <option>.txt</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr id = "tr_options">
+                    <td>
+                        <div class="form-group" style="width: 800px; padding: 10px 30px; text-align: center">
+                            <label for="form_insert_method">Options</label>
+                            <div class="vertical-center" style="border: 1.2px solid #d1d7dc; border-radius: 5px;; ">
+                                <div style="padding: 10px 0; text-align: center; padding-" >
+                                    <div class="form-check" style="padding-bottom:10px">
+                                      <input class="form-check-input" type="checkbox" id="compute_distance_matrices" name="compute_distance_matrices">
+                                      <label class="form-check-label" for="compute_distance_matrices">
+                                        Calculate distance matrices
+                                      </label>
+                                    </div>
+                                    <div style="text-align: center;">
+                                      <label class="sr-only" for="number_of_trees">Name</label>
+                                      <input type="text" class="form-control" style="width: 150px; margin: 0 auto" id="number_of_trees" names="number_of_trees" placeholder="Number of trees">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group" style="padding-right: 30px; margin-top: 41px; text-align: center">
+                            <label for="extension_distance_file" style="font-size: 13px">Choose the extension for the distance-file</label>
+                            <select class="form-control" id="extension_distance_file">
+                                <option>.csv</option>
+                                <option>.txt</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="buttons-wellvolks" style="width: 800px; text-align: center; padding-top: 80px">
+                            <ul>
+                                <li>
+                                    <a onclick="sunplin()" class="button-start-generate" style="padding-top: 100px; padding-left: 26px; padding-right: 20px" >
+                                       Generate
+                                    </a>
+                                </li>
+                                <li style=" padding-right: 90px"></li>
+                                <li>
+                                    <a onclick="menuRodapeJanelas('introdcao','carregar')" class="button-reset" style="padding-top: 100px; padding-left: 20px; padding-right: 20px" >
+                                       Reset
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+
+            </table>
+        </form>
+    </div>
+    <div id = "page_bottom" style="display: block; height: 990x; border-style: groove; margin: 10px 0; padding: 10px; font-size: 14px">
+        <div align="center">Download the User Manual <a href="http://wsmartins.net/public/UserManual_Sunplin.pdf">here</a>.</div>
+          <td colspan="2"></td>
+        <div align="center">SUNPLIN is under the terms of the <a href="http://creativecommons.org/licenses/by-nc/3.0/">Creative Commons Attibution Nocommercial 2.5 License</a>.</div>
+        <div align="center">The source-code is available  <a href="http://sourceforge.net/projects/sunplin/">here</a>.</div>
+    </div>
+</div>
+<div id = "teste">
+
+</div>
