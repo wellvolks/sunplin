@@ -1,6 +1,6 @@
 function validaForm(){
 	var form = document.forms[0];
-	var maxchars = 150000;
+	var maxchars = 1500000;
 
 	if (form.form_tree_newick.value.length > maxchars) {
 		( function($) {  $('#tr_tree_newick').css('background-color', 'rgb(255, 175, 175)'); } ) ( jQuery );
@@ -33,8 +33,8 @@ function validaForm(){
 			alert("Unfortunately your browser does not support file upload.");
 			return "";
 		}
-		var params = "" + tree;
-		if( form.form_put_mdcc.value == "" ) params += "#";
+		var params = "" + tree + "#";
+		if( form.form_put_mdcc.value == "" ) params += "#none";
 		else{
 			params += "#";
 			var i = 0;
@@ -42,9 +42,11 @@ function validaForm(){
 			var cnt = 0;
 			var ant = " ";
 			var check = 0;
+			str = str.replaceAll("\t", " ");
 			while( str.charAt(i) != '*' ){
 				if( str.charAt(i) == '\n' ){
 					if( cnt != 2 && check == 1 ){
+						alert(i);
 						( function($) {  $('#tr_put_mdcc').css('background-color', 'rgb(255, 175, 175)'); } ) ( jQuery );
 						alert("Error: Format of Species is incorrect!");
 						return ""; }
@@ -56,7 +58,7 @@ function validaForm(){
 					continue;
 				}
 				else if( str.charAt(i) == ' ' ){
-					if( ant.charAt(0) != ' ' && check <= 0 ){ check = 1; params += "~"; }
+					if( ant.charAt(0) != ' ' && check <= 0 ){ check = 1; params += "~";  }
 				}
 				else if( str.charAt(i) != '*' ){
 					if( ant.charAt(0) == ' ' ) cnt ++;
@@ -110,13 +112,12 @@ function validaForm(){
 				alert("The insertion method has been selected but have none PUT and MDDC informed!");
 				return "";
 			}
-			else params += "";
 		}
 		if( document.getElementById('number_of_trees').value  ){
 			params += "#";
 			params += document.getElementById('number_of_trees').value;
 			if( !(form.form_put_mdcc.value.length > 0) ){
-				params += "#";
+				params += "#0";
 				geraTree = "javascript:checkFileTree();";
 				imageGeraTree = "images/downloadLowPb.png";
 			}
@@ -129,13 +130,15 @@ function validaForm(){
 			}
 			else{
 				params += "#";
+				params += "0";
 				geraTree = "javascript:checkFileTree();";
 				imageGeraTree = "images/downloadLowPb.png";
 			}
 		}
 		if( document.getElementById('compute_distance_matrices').checked ) params += "#1";
 		else{
-			params += "#0";
+			params += "#";
+			params += "0";
 			calcMat = "javascript:checkFileMatrice();";
 			imageCalcMat = "images/downloadLowPb.png";
 		}

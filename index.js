@@ -46,9 +46,9 @@ const fs = require('fs')
 
     app.post('/sunpling', function(req, res){
       async function start() {
-        var result = await execShellCommand('"' + __dirname + '/public/software/sunplin" ' +   __dirname + '/public/software/input/input_' + req.session.id + '.txt');
+        var result = await execShellCommand('"' + __dirname + '/public/software/sunplin.exe" ' +   __dirname + '/public/software/input/input_' + req.session.id + '.txt');
         console.log('Sunplin finish [' + req.session + ']: ' + result);
-        res.send('{"success" : "Sunplin successfully", "status" : 200, "result": ' + result + '}');
+        res.send('{"success" : "Sunplin successfully", "status" : 200, "result": \n' + result + '}');
       }
 
       start();
@@ -69,12 +69,15 @@ const fs = require('fs')
     })
 
     app.get('/download/:file/:ext', function(req, res){
-      const file = __dirname + '/public/software/results/' + req.params.file + "_" + req.session.id + "." + req.params.ext;
-      var name_file = 'sunplin-distance-mat.';
+      var file = '';
+      var name_file = 'sunplin-distance-mat.rar';
       if (req.params.file == 'trees'){
-        name_file = 'sunplin-trees.';
+        file = __dirname + '/public/software/results/' + req.session.id + "/trees/new_trees." + req.params.ext + ".bz2";
+        name_file = 'sunplin-trees.bz2';
       }
-      name_file = name_file + req.params.ext;
+      else{
+        file = __dirname + '/public/software/results/' + req.session.id + "/dist.rar";
+      }
       res.download(file, name_file);
     });
 
@@ -90,7 +93,7 @@ const fs = require('fs')
      if (error) {
       console.warn(error);
      }
-     resolve(stdout? stdout : stderr);
+     resolve(stdout ? stdout : stderr);
     });
    });
   }

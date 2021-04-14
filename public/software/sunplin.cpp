@@ -26,7 +26,7 @@
 using namespace std;
 
 const double INF = 1e50;
-const int MAXN = 100010;
+const int MAXN = 10000010;
 const int MAXGENERATENAMES = 1000;
 const int MAXV = 98;
 const  double EPS = 1e-9;
@@ -64,7 +64,6 @@ int treesize[ MAXN ];
 int chain[ MAXN ];
 int homepos[ MAXN ];
 int up[MAXN];
-int down[7000][7000];
 int sumAux[MAXN];
 int noat[MAXN];
 int depth[MAXN];
@@ -75,13 +74,12 @@ int amountNewNames = 0;
 int camNode = 0;
 int pos, cntchain, vezes = 1;
 int chainleader[ MAXN ];
-char taxon[7000][100];
+char taxon[700000][100];
 char line[MAXN];
-char taxonCopia[7000][100];
+char taxonCopia[700000][100];
 char version;
 double bl[MAXN];
 double blCopy[MAXN];
-double dist[7000][7000];
 double custAnt = 0.;
 bool dfstop;
 
@@ -95,7 +93,7 @@ void clearDisplay();
 void newSpeciesFile(char local[100], string nameNewFile);
 void insertSpecies(int u, string name);
 void convertNewickToNexus(int op, fstream &nexus, string nw);
-void calcMatrixDistance(string local, string nameNewFile);
+void calcMatrixDistance(string local, string dirNewFile);
 void removeEdge(int fatherAux, int child);
 void printTime();
 int lca(int a, int b) ;
@@ -112,109 +110,166 @@ vector < insert > espNames;
 vector < vector<int > > grafo, grafoMatrix;
 vector < string > nameRand;
 vector < int >  father;
-
+string session_id = "";
+string str_input = "";
 
 int main(int argc, char* argv[]){
 	srand ( time(NULL) );
-	argc = 10;
 	string tree = "";
-	string putss = "";
 	string method = "";
 	string distMat = "";
 	string qtdTrees = "";
-    string str_input = "";
-    string session_id = "";
     string dir_str = "";
 	string ext_mat = "";
 	string ext_tree = "";
-	if( argc <= 1 ){
-		cout << "tree_status:fail" << endl;
-		cout << "tree_info:missing parameters" << endl; 
-		cout << "mat_status:fail" << endl;
-		cout << "mat_info:missing parameters" << endl; 
-		return 0;
-	}
-	else{
-		try {
-			ifstream in( argv[1] , ifstream::in );
-			in >> str_input;
-			in.close();
-			char *p = strtok((char*)str_input.c_str(), "#");
-			tree += p;
-			p = strtok(NULL,"#");
-			putss += p;
-			p = strtok(NULL,"#");
-			method += p;
-			p = strtok(NULL,"#");
-			qtdTrees += p;
-			p = strtok(NULL,"#");
-			distMat += p;
-			p = strtok(NULL,"#");
-			ext_tree += p;
-			p = strtok(NULL,"#");
-			ext_mat += p;
-			p = strtok(NULL,"#");
-			session_id += p;
-			p = strtok(NULL,"#");
-			dir_str += p;
-			strcpy(line, (char*)tree.c_str());
-			version = method[0];
-			sscanf((char*)qtdTrees.c_str(), "%d", &sometimesGenerates);
-			cout << "parsing_params:ok" << endl;
-			cout << "ext_mat:" << ext_mat << endl;
-			cout << "ext_tree:" << ext_tree << endl;
-		}
-		catch(const char *p){
-			cout << "parsing_params:fail" << endl;
-			cout << "parsing_params_info:" << p << endl;
-		}
-		catch (const std::exception &e) {
-			cout << "parsing_params:fail" << endl;
-			cout << "parsing_params_info:" << e.what() << endl;
-		}
-		catch(...){
-			cout << "parsing_params:fail" << endl;
-			cout << "parsing_params_info:unknown" << endl;
-		}
 
-		if( putss == "none" ){
-			cout << "tree_status:missing" << endl;
-			cout << "tree_info:Inserting puts no option was chosen" << endl; 
-			
-			calcMatrixDistance("",dir_str + "dist_"+session_id+ext_mat);
-			cout << "mat_status:ok" << endl;
-			cout << "mat_info:ok" << endl;
+	try{
+		if( argc <= 1 ){
+			cout << "tree_status:fail" << endl;
+			cout << "tree_info:missing parameters" << endl; 
+			cout << "mat_status:fail" << endl;
+			cout << "mat_info:missing parameters" << endl; 
+			return 0;
 		}
 		else{
-			try{
-				generateNamesSpecies();
-				parsingTree();
-				newSpeciesFile((char*)putss.c_str(), dir_str + "trees_" + session_id+ext_tree);
-				cout << "tree_status:ok" << endl;
-				cout << "tree_info:ok" << endl;
+			string putss = "";
+			try {
+				ifstream in( argv[1] , ifstream::in );
+				in >> str_input;
+				in.close();
+				char *p = strtok((char*)str_input.c_str(), "#");
+				tree += p;
+				p = strtok(NULL,"#");
+
+				putss += p;
+				
+				p = strtok(NULL,"#");
+				method += p;
+				
+				p = strtok(NULL,"#");
+				qtdTrees += p;
+				
+				p = strtok(NULL,"#");
+				distMat += p;
+				
+				p = strtok(NULL,"#");
+				ext_tree += p;
+				
+				p = strtok(NULL,"#");
+				ext_mat += p;
+				
+				p = strtok(NULL,"#");
+				session_id += p;
+				
+				p = strtok(NULL,"#");
+				dir_str += p;
+				
+				strcpy(line, (char*)tree.c_str());
+				version = method[0];
+				sscanf((char*)qtdTrees.c_str(), "%d", &sometimesGenerates);
+				cout << "parsing_params:ok" << endl;
+				cout << "ext_mat:" << ext_mat << endl;
+				cout << "ext_tree:" << ext_tree << endl;
+
+				string comand_mkdir  = "mkdir \"" + dir_str + session_id + "/trees\" 2> NUL";
+				system((char*)comand_mkdir.c_str());
+				
+				comand_mkdir = "mkdir \"" + dir_str + session_id + "/dist\" 2> NUL";
+				system((char*)comand_mkdir.c_str());
+
 			}
 			catch(const char *p){
-				cout << "tree_status:fail" << endl;
-				cout << "tree_info:" << p << endl;
+				cout << "parsing_params:fail" << endl;
+				cout << "parsing_params_info:" << p << endl;
 			}
 			catch (const std::exception &e) {
-				cout << "tree_status:fail" << endl;
-				cout << "tree_info:" << e.what() << endl;
+				cout << "parsing_params:fail" << endl;
+				cout << "parsing_params_info:" << e.what() << endl;
 			}
 			catch(...){
-				cout << "tree_status:fail" << endl;
-				cout << "tree_info:unknown" << endl;
+				cout << "parsing_params:fail" << endl;
+				cout << "parsing_params_info:unknown" << endl;
 			}
-			if( distMat[0] == '1' ){	
-				calcMatrixDistance(dir_str + "trees_" + session_id + ext_tree, dir_str+"dist_"+session_id+ext_mat);
+
+			if( putss == "none" ){
+				cout << "tree_status:missing" << endl;
+				cout << "tree_info:Inserting puts no option was chosen" << endl; 
+				
+				calcMatrixDistance("", dir_str + session_id + "/dist/"); //+ "dist_"+ext_mat);
+
 				cout << "mat_status:ok" << endl;
 				cout << "mat_info:ok" << endl;
 			}
 			else{
-				cout << "mat_status:missing" << endl;
-				cout << "mat_info:Alternative calculation of distance matrix was chosen" << endl;
+				bool tree_ok = false;
+				try{
+					generateNamesSpecies();
+					parsingTree();
+					newSpeciesFile((char*)putss.c_str(), dir_str + session_id + "/trees/new_trees.nex"); //+ "trees_" + session_id+ext_tree);
+					cout << "tree_status:ok" << endl;
+					cout << "tree_info:ok" << endl;
+					tree_ok = true;
+				}
+				catch(const char *p){
+					cout << "tree_status:fail" << endl;
+					cout << "tree_info:" << p << endl;
+				}
+				catch (const std::exception &e) {
+					cout << "tree_status:fail" << endl;
+					cout << "tree_info:" << e.what() << endl;
+				}
+				catch(...){
+					cout << "tree_status:fail" << endl;
+					cout << "tree_info:unknown" << endl;
+				}
+
+				if( distMat[0] == '1' ){	
+					try{
+						calcMatrixDistance(dir_str + session_id + "/trees/new_trees.nex", dir_str + session_id + "/dist/"); //+ "trees_" + session_id + ext_tree, dir_str+"dist_"+session_id+ext_mat);
+						cout << "mat_status:ok" << endl;
+						cout << "mat_info:ok" << endl;
+					}
+					catch(const char *p){
+						cout << "mat_status:fail" << endl;
+						cout << "mat_info:" << p << endl;
+					}
+					catch (const std::exception &e) {
+						cout << "mat_status:fail" << endl;
+						cout << "mat_info:" << e.what() << endl;
+					}
+					catch(...){
+						cout << "mat_status:fail" << endl;
+						cout << "mat_info:unknown" << endl;
+					}
+				}
+				else{
+					cout << "mat_status:missing" << endl;
+					cout << "mat_info:Alternative calculation of distance matrix was chosen" << endl;
+				}
+				if(tree_ok){
+					string comand_compress = "pbzip2 -zf " + dir_str + session_id + "/trees/new_trees.nex";
+					system((char*)comand_compress.c_str());
+				}
 			}
 		}
+	}
+	catch(const char *p){
+		cout << "tree_status:fail" << endl;
+		cout << "tree_info:" << p << endl;
+		cout << "mat_status:fail" << endl;
+		cout << "mat_info:" << p << endl;
+	}
+	catch (const std::exception &e) {
+		cout << "tree_status:fail" << endl;
+		cout << "tree_info:" << e.what() << endl;
+		cout << "mat_status:fail" << endl;
+		cout << "mat_info:" << e.what() << endl;
+	}
+	catch(...){
+		cout << "tree_status:fail" << endl;
+		cout << "tree_info:unknown" << endl;
+		cout << "mat_status:fail" << endl;
+		cout << "mat_info:unknown" << endl;
 	}
 	return 0;
 }
@@ -237,7 +292,7 @@ void generateNamesSpecies(){
 void convertNewickToNexus(int op, fstream &nexus, string nw){
 	switch (op){
 		case 0: nexus << "BEGIN TREES;\n"; break;
-		case 1: nexus << "Tree tree" << treeAmount++ << " = " << nw << "\n"; break;
+		case 1: nexus << "Tree tree" << treeAmount++ << " = " << nw << ";\n"; break;
 		case 2: nexus << "END;"; nexus.close(); break;
 	}
 }
@@ -256,11 +311,24 @@ void parsingTree(){
 	char ch, tmp[15], iname[1000], taxa[1000];
 	comma = quant = nodes = rbrack = lbrack = 0;
 	quant = strlen(line);
+	stack < char > p;
 	for(int i = 0; i < quant; i++){
 		ch = line[i];
-		if(ch == '(') lbrack++;
-		if(ch == ')') rbrack++;
+		if(ch == '('){
+			lbrack++;
+			p.push('(');
+		}
+		if(ch == ')'){
+			rbrack++;
+			if (p.top() != '('){
+				errorType("Unbalanced parenthesis.\n","","");
+			}
+			p.pop();
+		}
 		if(ch == ',') comma++;
+	}
+	if(p.size()){
+		errorType("Unbalanced parenthesis.\n","","");
 	}
 	if(lbrack != rbrack) errorType("Unbalanced parenthesis.\n","","");
 	nodes = lbrack + comma + 1;
@@ -269,9 +337,9 @@ void parsingTree(){
 	grafo.clear();
 	father.clear();
 	grafoMatrix.clear();
-	grafo.resize(nodes+200);
-	grafoMatrix.resize(nodes+200);
-	father.resize(nodes+200);
+	grafo.resize(nodes+10);
+	grafoMatrix.resize(nodes+10);
+	father.resize(nodes+10);
 	while(line[n] != ';') n++;
 	while (i < n) {
 		done = 0;
@@ -299,7 +367,7 @@ void parsingTree(){
 			done = 1;
 			i++;
 		}
-		else if ((((line[i] >= 65) && (line[i] <= 90)) || ( (line[i] >= 97) && (line[i] <= 122)) || (line[i] == 45) || (line[i] == 95)) && (line[i-1] == ')')){
+		else if ((((line[i] >= 65) && (line[i] <= 90)) || ((line[i] >= 97) && (line[i] <= 122)) || ((line[i] >= 48) && (line[i] <= 57)) || (line[i] == 45) || (line[i] == 95)) && (line[i-1] == ')')){
 			string name = "";
 			while ((line[i] != ':') && (line[i] != ',') && (line[i] != ')') && (line[i] != '[') && (line[i] != ';') && (line[i] != ']')) {
 				name += line[i];
@@ -316,7 +384,7 @@ void parsingTree(){
 		else if (line[i] == ':'){
 			string num = "";
 			i++;
-			while(((line[i] >= 48) && (line[i] <= 57)) || (line[i] == 46) || (line[i] == 'E') || (line[i] == '-')){
+			while(((line[i] >= 48) && (line[i] <= 57)) || (line[i] == 46) || (line[i] == 'E') || (line[i] == 'e') || (line[i] == '-')){
 				num += line[i];
 				i++;
 			}
@@ -342,12 +410,14 @@ void parsingTree(){
 			father[nodei+1] = leni+1;
 		}
 	}
+
 	for (i = 0; i <= nodei; i++)
 		if (branchlengths == 0) bl[i] = 1.0;
-	
+
 	for (i = 0; i < nodes; i++){ 
 		if (strcmp(taxon[i], ".") == 0) strcpy(taxon[i], "");
 	}
+
 }
 
 /*                        Responsible for the insertion of missing species                  */
@@ -374,6 +444,7 @@ int searchNameEspecie(char *str){
 	for(int i = 0; i < nodes; i++) 
 		if( !strcmp(str, taxon[i]) ) return (i + 1);
 	errorType("Error! The specie ",str," not belong to tree!");
+	return 0;
 }
 
 void newSpeciesFile(char *putss, string nameNewFile){
@@ -530,78 +601,91 @@ double dfs_sum_V2( int u){
 
 /*                        Responsible for the calculation of the distance matrix                  */
 
-void calc(){
+void calc(string nameNewFile, bool flag, int &qtdMatrix){
 	int d = 0;
+	fstream out ((char*)nameNewFile.c_str(), fstream::out);
+	
 	for(int i = 0; i <= nodes; i++) nodedad[i] = -1; 
+
 	explore( 1, 0 );
 	pos = 0, cntchain = 0;
 	heavy_light( 1, 0, -1, 0 );
+	
+	if(flag){
+		out << "Matrix Distance  " << qtdMatrix << " :\n";
+	}
+	for(int i = 0; i < nodes; i++){
+		if(!noat[i])
+			out << "\t" << taxon[i];
+	}
+	out << "\n";
 	for (int k = 1; k <= nodes; k++){
 		if( !noat[k-1] ){
-			for (int w = k+1; w <= nodes; w++) {
+			out << taxon[k];
+			for (int w = 1; w <= nodes; w++) {
+				if(w == k) continue;
 				if( !noat[w-1] ){
 					d = lca(k,w);
-					dist[k-1][w-1] = dist[w-1][k-1] = bl[k-1] + bl[w-1] - 2.0*bl[d-1];
+					double dist_val = bl[k-1] + bl[w-1] - 2.0*bl[d-1];
+					out << "\t" << fixed << setprecision(6) << dist_val;
 				}
 			}
+			out << "\n";
 		}
 	}
+	out.close();
 }
 
-void calcMatrixDistance(string local, string nameNewFile){
+void calcMatrixDistance(string local, string dirNewFile){
 	try{
 		int qtdMatrix = 0;
 		bool stop = false;
 		if( local != "" ){
 			ifstream in( local.c_str() , ifstream::in );
-			fstream out (nameNewFile.c_str(), fstream::out);
 			char *p;
-			while ( in >> line ){
-				p = strstr(line, "(");
-				while( p == NULL ){ if( !(in >> line) ){ stop = true; break; }  p = strstr(line, "("); }
-				if( stop ) break;
-				parsingTree();
-			
-				calc();
-				out << "Matrix Distance  " << qtdMatrix++ << " :\n";
-				for(int i = 0; i < nodes; i++){
-					if(!noat[i])
-						out << "\t" << taxon[i];
-				}
-				out << "\n";
-				for(int i = 0; i < nodes; i++){
-					if(!noat[i]){
-						out << taxon[i];
-						for(int j = 0; j < i; j++){
-							if(!noat[j]) out << "\t" << fixed << setprecision(6) << dist[i][j];
-						}
-						out << "\n";
+			string str_line = "";
+			bool ao_menos_uma_arvore = false;
+			while ( in >> str_line ){
+				p = strstr((char*)str_line.c_str(), "(");
+				while( p == NULL ){ if( !(in >> str_line) ){ stop = true; break; }  p = strstr((char*)str_line.c_str(), "("); }
+				if( stop ){
+					if(!ao_menos_uma_arvore){
+						cout << "mat_status:fail" << endl;
+						cout << "mat_info:No tree was found for calculating the distance matrix" << endl;
+						exit(1);
 					}
+					break;
 				}
+
+				if(str_line.back() != ';') str_line += ";";
+
+				strcpy(line, (char*)str_line.c_str());
+				parsingTree();
+				ao_menos_uma_arvore = true;
+				calc(dirNewFile + "mat_dist_tree_" + to_string(qtdMatrix) + ".csv", true, qtdMatrix);
+				
+				string comand_compress = "pbzip2 -zf " + dirNewFile + "mat_dist_tree_" + to_string(qtdMatrix) + ".csv";
+				system((char*)comand_compress.c_str());
+
 				for( int i = 0; i < nodes; i++ ) noat[i] = 0;
+				qtdMatrix++;
 			}
-			out.close();
 		}
 		else{
 			parsingTree();
-			calc();
-			fstream out ((char*)nameNewFile.c_str(), fstream::out);
-			for(int i = 0; i < nodes; i++){
-				if(!noat[i])
-					out << "\t" << taxon[i];
-			}
-			out << "\n";
-			for(int i = 0; i < nodes; i++){
-				if(!noat[i]){
-					out << taxon[i];
-					for(int j = 0; j < i; j++){
-						if(!noat[j]) out << "\t" << fixed << setprecision(6) << dist[i][j];
-					}
-					out << "\n";
-				}
-			}
-			out.close();
+			calc(dirNewFile + "mat_dist.csv", false, qtdMatrix);
+
+			string comand_compress = "pbzip2 -zf mat_dist.csv";
+			system((char*)comand_compress.c_str());
 		}
+		
+		if(dirNewFile.back() == '\\' || dirNewFile.back() == '/'){
+			dirNewFile.pop_back();
+		}
+
+		//string comand_compress_folder = "Rar a -ep1 -idq -r -y \"" + dirNewFile + ".rar\" \"" + dirNewFile + "\"";
+		string comand_compress_folder = "zip -r " + dirNewFile + ".zip " + dirNewFile;
+		system((char*)comand_compress_folder.c_str());		
 	}
 	catch (const std::exception &e) {
 		cout << "mat_status:fail" << endl;
